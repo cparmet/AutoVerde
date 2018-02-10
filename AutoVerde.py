@@ -110,8 +110,9 @@ body = "Today's rate is " + str(todays_rate) + ' for ' + str(todays_term) + ' mo
 if change_rate > 0 or change_term > 0:
     sendemail(subject='We GOT ONE!', body=body)
 
-else:
-    sendemail(subject='No movement, master', body=body)
+# Uncomment this next bit if I want to get emails even if the rate/term isn't better.
+# else:
+#     sendemail(subject='No movement, master', body=body)
 
 
 # Update rate history.
@@ -122,5 +123,6 @@ output_file_name = 'rate_history.csv'
 fullpath = "%s\%s" % ("..\\", output_file_name)
 rate_history.to_csv(fullpath, index=False)
 
-driver.close()
+# Feb 2018 - Changed from .close to .quit, so it will also kill chromedriver.exe process
+driver.quit()
 
