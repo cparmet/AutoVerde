@@ -123,6 +123,6 @@ output_file_name = 'rate_history.csv'
 fullpath = "%s\%s" % ("..\\", output_file_name)
 rate_history.to_csv(fullpath, index=False)
 
-# Feb 2018 - Changed from .close to .quit, so it will also kill chromedriver.exe process
+# Feb 2018 - Changed from .close to .quit, so it will also kill chromedriver.exe process.
 driver.quit()
 
