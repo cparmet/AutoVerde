@@ -2,15 +2,6 @@
 # If it's better than my contract, send myself an email.
 # And log it.
 
-# # Selenium modules for setting up a headless Chrome browser
-# from selenium import webdriver
-# from selenium.webdriver.chrome.options import Options
-# from selenium.webdriver.support.ui import Select
-#
-# CHROME_PATH = 'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe'  # '/usr/bin/google-chrome'
-# CHROMEDRIVER_PATH = 'chromedriver.exe'
-# WINDOW_SIZE = "1920,1080"
-
 # Scraping modules
 import bs4 as bs
 import requests
@@ -26,7 +17,7 @@ import sys
 
 # A function to send an email.
 def sendemail(subject='AutoVerde wants a minute', body=''):
-    # Store API key outside the git repository.
+    # Store API key and email address outside the git repository.
     file_sendgrid_key = open("../sendgridkey.txt", "r")
     file_email = open("../email_address.cfg", "r")
 
@@ -50,48 +41,6 @@ def sendemail(subject='AutoVerde wants a minute', body=''):
     print(response.headers)
 
     return
-
-
-# Use Selenium to get today's rate details.
-# https://stackoverflow.com/a/23447450/7414797
-
-# chrome_options = Options()
-# chrome_options.add_argument("--headless")
-# chrome_options.add_argument("--window-size=%s" % WINDOW_SIZE)
-# chrome_options.binary_location = CHROME_PATH
-#
-# driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH,
-#                           chrome_options=chrome_options)
-#
-#
-# driver.get("https://www.verdeenergy.com/Registration")
-#
-# # This next line confirms that loading the website via Selenium still shows Massachusetts selected by default
-# # driver.get_screenshot_as_file("capture.png")
-#
-#
-# # Check: Is it still live? I found that when it timedout, the current_url will change.
-# if 'Registration' not in driver.current_url:
-#     sendemail(subject='AutoVerde error', body='Driver timeout')
-#
-# # Select the dropdown box.
-# select = Select(driver.find_element_by_id('SelectedElectricUtilityCompany_top'))
-#
-# # Activate the first option from the list
-# select.select_by_index(1)
-#
-# # Use next line as debug to confirm select worked. It did!
-# # driver.get_screenshot_as_file("capture.png")
-#
-#
-# # Get the result
-# rate = driver.find_element_by_id('todayRate')
-# todays_rate = rate.text
-# todays_rate = float(todays_rate) * 100
-# term = driver.find_element_by_id('todayTerm')
-# todays_term = term.text
-# # print(todays_rate)
-# # print('For ' + todays_term + ' months')
 
 ## Scrape the website
 url = 'https://www.verdeenergy.com/get-rates/?UtilityID=150&z=01721'
@@ -145,7 +94,7 @@ for i_, new_rate in rates.iterrows():
     change_term = int(new_rate.term) - int(contract_term) # Positive means term is now longer.
 
     if change_rate > 0 or change_term > 0:
-        body += "Today's rate is " + str(new_rate.rate) + ' for ' + str(new_rate.term) + ' months.'
+        body += "Today's rate is " + str(new_rate.rate) + ' for ' + str(new_rate.term) + ' months. '
 
 # If some rates were better, email them.
 if body != '':
@@ -164,8 +113,3 @@ rate_history.to_csv(fullpath, index=False)
 # Uncomment this next bit if I want to get emails even if the rate/term isn't better.
 # else:
 #     sendemail(subject='No movement, master', body=body)
-
-
-# Feb 2018 - Changed from .close to .quit, so it will also kill chromedriver.exe process.
-# driver.quit()
-
