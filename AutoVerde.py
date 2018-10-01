@@ -111,5 +111,4 @@ fullpath = "%s\%s" % ("..\\", output_file_name)
 rate_history.to_csv(fullpath, index=False)
 
 # Uncomment this next bit if I want to get emails even if the rate/term isn't better.
-# else:
-#     sendemail(subject='No movement, master', body=body)
+sendemail(subject='No movement, master', body=body)
